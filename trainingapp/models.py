@@ -108,8 +108,7 @@ class user_registration(models.Model):
 
 
 class attendance(models.Model):
-    attendance_user = models.ForeignKey(user_registration, on_delete=models.SET_NULL,
-                             related_name='attendanceuser', null=True, blank=True)
+    attendance_user = models.ForeignKey(user_registration, on_delete=models.SET_NULL,related_name='attendanceuser', null=True, blank=True)
     attendance_date = models.DateField(null=True, blank=True)
     attendance_status = models.CharField(max_length=200)
 
@@ -119,16 +118,11 @@ class attendance(models.Model):
 
 
 class trainer_task(models.Model):
-    trainer_task_user = models.ForeignKey(user_registration, on_delete=models.DO_NOTHING,
-                             related_name='trainer_task_trainee', null=True, blank=True)
-    trainer_task_team_name = models.ForeignKey(
-        create_team, on_delete=models.SET_NULL, related_name='team_name', null=True, blank=True)
-    trainer_task_category=models.ForeignKey(category, on_delete=models.SET_NULL,
-                             related_name='taskcategory', null=True, blank=True)
-    trainer_task_course=models.ForeignKey(course, on_delete=models.SET_NULL,
-                             related_name='taskcourse', null=True, blank=True)
-    #designation=models.ForeignKey(designation, on_delete=models.SET_NULL,
-                             #related_name='taskdesignation', null=True, blank=True)
+    trainer_task_user = models.ForeignKey(user_registration, on_delete=models.DO_NOTHING,related_name='trainer_task_trainee', null=True, blank=True)
+    trainer_task_team_name = models.ForeignKey(create_team, on_delete=models.SET_NULL, related_name='team_name', null=True, blank=True)
+    trainer_task_category=models.ForeignKey(category, on_delete=models.SET_NULL,related_name='taskcategory', null=True, blank=True)
+    trainer_task_course=models.ForeignKey(course, on_delete=models.SET_NULL,related_name='taskcourse', null=True, blank=True)
+    #designation=models.ForeignKey(designation, on_delete=models.SET_NULL,related_name='taskdesignation', null=True, blank=True)
     trainer_task_taskname = models.CharField(max_length=240)
     trainer_task_startdate = models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)
     trainer_task_enddate = models.DateField(auto_now_add=False, auto_now=False,  null=True, blank=True)

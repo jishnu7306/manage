@@ -115,7 +115,7 @@
     <div class="card">
       <div class="card-body">
         <h4 class="card-title" style="color: white">Bar chart</h4>
-        <canvas id="barChart" style="height: 200px"></canvas>
+        <canvas id="chart" style="height: 200px"></canvas>
       </div>
     </div>
   </div>
@@ -126,7 +126,7 @@
     data: {
       datasets: [
         {
-          data: [20, 30, 40],
+          data: {{ data|safe }},
           backgroundColor: [
             "rgba(255, 99, 132, 0.5)",
             "rgba(54, 162, 235, 0.5)",
@@ -163,7 +163,7 @@
           backgroundColor: "#79AEC8",
           borderColor: "#417690",
 
-          data: [0, 0, 0],
+          data: {{ data|safe }},
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
             "rgba(54, 162, 235, 0.2)",
@@ -187,7 +187,7 @@
   <div class="col-12 col-sm-12 col-md-12 col-lg-12 grid-margin">
     <div class="card">
       <a
-        href="/softwareapp/Admin_emp_attendance/"
+        href="{% url 'Admin_emp_attendance' c.id %}"
         style="text-decoration: none; color: #f8f9fa">
         <div class="card-body">
           <div class="row">

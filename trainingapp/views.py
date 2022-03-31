@@ -640,8 +640,9 @@ def Admin_Dashboard(request):
     mem = User.objects.all()
     z = designation.objects.get(designation_name='Admin')
     var = user_registration.objects.filter(designation_id=z.id)
-    vars = user_registration.objects.all()
-    return render(request, 'software_training/training/admin/admin_Dashboard.html', {'mem': mem, 'var':var, 'vars':vars, })
+    vars = user_registration.objects.all().exclude(designation_id=z.id)
+    c = course.objects.all()
+    return render(request, 'software_training/training/admin/admin_Dashboard.html', {'mem': mem, 'var':var, 'vars':vars,'c':c, })
 
 def Admin_categories(request):
     mem = User.objects.all()
@@ -683,19 +684,27 @@ def Admin_emp_profile(request,id):
     c = user_registration.objects.get(id=id)
     z = designation.objects.get(designation_name='Admin')
     var = user_registration.objects.filter(designation_id=z.id)
-    return render(request,'software_training/training/admin/admin_emp_profile.html', {'mem': mem,'var':var,'c':c,})
+    labels = []
+    data = []
+    queryset = user_registration.objects.filter(id=c.id)
+    for i in queryset:
+        labels=[i.workperformance,i.attitude,i.creativity]
+        data=[i.workperformance,i.attitude,i.creativity]
+    return render(request,'software_training/training/admin/admin_emp_profile.html', {'mem': mem,'var':var,'c':c,'labels':labels,'data':data})
 
-def Admin_emp_attendance(request):
+def Admin_emp_attendance(request,id):
     mem = User.objects.all()
+    c = user_registration.objects.get(id=id)
     z = designation.objects.get(designation_name='Admin')
     var = user_registration.objects.filter(designation_id=z.id)
-    return render(request,'software_training/training/admin/admin_emp_attendance.html', {'mem': mem,'var':var,})
+    return render(request,'software_training/training/admin/admin_emp_attendance.html', {'mem': mem,'var':var,'c':c,})
 
-def Admin_emp_attendance_show(request):
+def Admin_emp_attendance_show(request,id):
     mem = User.objects.all()
+    c = attendance.objects.filter(attendance_user_id=id)
     z = designation.objects.get(designation_name='Admin')
     var = user_registration.objects.filter(designation_id=z.id)
-    return render(request,'software_training/training/admin/admin_emp_attendance_show.html', {'mem': mem,'var':var,})
+    return render(request,'software_training/training/admin/admin_emp_attendance_show.html', {'mem': mem,'var':var,'c':c,})
 
 def Admin_task(request):
     mem = User.objects.all()
@@ -703,24 +712,61 @@ def Admin_task(request):
     var = user_registration.objects.filter(designation_id=z.id)
     return render(request,'software_training/training/admin/admin_task.html', {'mem': mem,'var':var,})
 
+
 def Admin_givetask(request):
     mem = User.objects.all()
     z = designation.objects.get(designation_name='Admin')
     var = user_registration.objects.filter(designation_id=z.id)
-    return render(request,'software_training/training/admin/admin_givetask.html', {'mem': mem,'var':var,})
+
+    if request.method == 'POST':
+        sc1 = request.POST['Department']
+        sc2 = request.POST['designation']
+        sc3 = request.POST['projectname']
+        sc4 = request.POST['task']
+        sc7 = request.POST['discrip']
+        sc5 = request.POST['start']
+        sc6 = request.POST['end']
+        ogo = request.FILES['img[]']
+        print(sc4)
+        
+        catry = trainer_task(tasks=sc4,files=ogo,description=sc7,
+                                  startdate=sc5, enddate=sc6,department_id = sc1,designation_id = sc2,user_id = sc3)
+        catry.save()
+    cate = category.objects.all()
+    desig = designation.objects.all()
+    proj = course.objects.all()
+    emp = user_registration.objects.all()
+    return render(request,'software_training/training/admin/admin_givetask.html', {'mem': mem,'var':var,'cate':cate,'desig':desig,'proj':proj,'emp':emp,})
+
+
+def Admin_taskcategory(request):
+    mem = User.objects.all()
+    z = designation.objects.get(designation_name='Admin')
+    var = user_registration.objects.filter(designation_id=z.id)  
+
+ 
+    Adm = user_registration.objects.filter(id=z.id) 
+    dept_id = request.GET.get('dept_id')
+    # Desig = designation.objects.filter(department_id=dept_id)
+    Desig = course.objects.filter(course_category = dept_id)
+    print(Desig )
+    print(dept_id )
+    print('jishnu')
+    return render(request, 'software_training/training/admin/admin_taskcategory.html', {'Desig': Desig,'Adm':Adm,'mem':mem,'var':var,})
 
 def Admin_current_task(request):
     mem = User.objects.all()
-    c = trainer_task.objects.all()
+    c = trainer_task.objects.filter(trainer_task_status = 0).order_by('-id')
     z = designation.objects.get(designation_name='Admin')
-    var = user_registration.objects.filter(designation_id=z.id)
+    var = user_registration.objects.filter(designation_id=z.id,)
     return render(request,'software_training/training/admin/admin_current_task.html', {'mem': mem,'var':var,'c':c,})
 
 def Admin_previous_task(request):
     mem = User.objects.all()
+    c = trainer_task.objects.filter(trainer_task_status = 1).order_by('-id')
     z = designation.objects.get(designation_name='Admin')
     var = user_registration.objects.filter(designation_id=z.id)
-    return render(request,'software_training/training/admin/admin_previous_task.html', {'mem': mem,'var':var,})
+    return render(request,'software_training/training/admin/admin_previous_task.html', {'mem': mem,'var':var,'c':c,})
 
 def Admin_registration_details(request):
     mem = User.objects.all()
@@ -822,6 +868,49 @@ def Admin_coursedetails(request):
     z = designation.objects.get(designation_name='Admin')
     var = user_registration.objects.filter(designation_id=z.id)
     return render(request,'software_training/training/admin/admin_coursedetails.html', {'mem': mem,'var':var,}) 
+
+def Admin_account_trainer(request):
+    mem = User.objects.all()
+    z = designation.objects.get(designation_name='Admin')
+    var = user_registration.objects.filter(designation_id=z.id)
+    
+    return render(request, 'software_training/training/admin/admin_account_trainer.html',{'mem': mem,'var':var,})
+
+def imagechange(request,id):
+    
+    if request.method == 'POST':
+        # id = request.GET.get('id')
+        abc = user_registration.objects.get(id=id)
+        abc.photo = request.FILES['filenamees']
+        abc.save()
+        return redirect('Admin_account_trainer')
+    return render(request, 'software_training/training/admin/admin_account_trainer.html' )
+
+
+def Admin_changepassword(request):
+    mem = User.objects.all()
+    z = designation.objects.get(designation_name='Admin')
+    var = user_registration.objects.filter(designation_id=z.id)
+    if request.method == 'POST':
+        abc = user_registration.objects.get(id=z.id)
+        oldps = request.POST['currentPassword']
+        newps = request.POST['newPassword']
+        cmps = request.POST.get('confirmPassword')
+        if oldps != newps:
+            if newps == cmps:
+                abc.password = request.POST.get('confirmPassword')
+                abc.save()
+                return render(request, 'software_training/training/admin/admin_Dashboard.html', {'z': z})
+    
+            elif oldps == newps:
+                messages.add_message(request, messages.INFO, 'Current and New password same')
+        else:
+            messages.info(request, 'Incorrect password same')
+    
+        return render(request, 'software_training/training/admin/admin_changepassword.html', {'mem': mem,'var':var,'z': z})
+    
+    return render(request, 'software_training/training/admin/admin_changepassword.html', {'mem': mem,'var':var,'z': z})
+    
 
 #******************accounts****************
 

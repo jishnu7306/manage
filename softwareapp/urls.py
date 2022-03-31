@@ -430,8 +430,8 @@ urlpatterns = [
    path('Admin_emp_course_list/<int:id>/', training_views.Admin_emp_course_list,name='Admin_emp_course_list'),
    path('Admin_emp_course_details/<int:id>/', training_views.Admin_emp_course_details,name='Admin_emp_course_details'),
    path('Admin_emp_profile/<int:id>/', training_views.Admin_emp_profile, name='Admin_emp_profile'),
-   path('Admin_emp_attendance/', training_views.Admin_emp_attendance,name='Admin_emp_attendance'),
-   path('Admin_emp_attendance_show/', training_views.Admin_emp_attendance_show,name='Admin_emp_attendance_show'),
+   path('Admin_emp_attendance/<int:id>/', training_views.Admin_emp_attendance,name='Admin_emp_attendance'),
+   path('Admin_emp_attendance_show/<int:id>/', training_views.Admin_emp_attendance_show,name='Admin_emp_attendance_show'),
    path('Admin_task/', training_views.Admin_task, name='Admin_task'),
    path('Admin_givetask/',training_views.Admin_givetask, name='Admin_givetask'),
    path('Admin_current_task/', training_views.Admin_current_task,name='Admin_current_task'),
@@ -454,6 +454,13 @@ urlpatterns = [
    path('Admin_courselist/', training_views.Admin_courselist, name='Admin_courselist'),
    path('Admin_coursedetails/', training_views.Admin_coursedetails, name='Admin_coursedetails'),
    path('teamdelete/<int:id>/', training_views.teamdelete, name='teamdelete'),
+   path('Admin_taskcategory/', training_views.Admin_taskcategory, name='Admin_taskcategory'),
+   path('Admin_account_trainer/', training_views.Admin_account_trainer, name='Admin_account_trainer'),
+   path('imagechange/<int:id>/', training_views.imagechange, name='imagechange'),
+   path('Admin_changepassword/', training_views.Admin_changepassword, name='Admin_changepassword'),
+
+
+   
     
     #******************************Accounts****************************
 
